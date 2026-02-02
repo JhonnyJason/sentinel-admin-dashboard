@@ -1,0 +1,6 @@
+[submodule "sources"]
+	path = sources
+	url = git@github.com:JhonnyJason/sentinel-admin-dashboard-sources.git
+[submodule "toolset"]
+	path = toolset
+	url = git@github.com:JhonnyJason/toolset.git
