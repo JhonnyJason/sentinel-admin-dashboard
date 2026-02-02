@@ -1,2 +1,5 @@
 # Task 3
-Not defined yet.
+Implement ForexScore Playground - FocusPair display
+
+## Details
+...
