@@ -1,13 +1,12 @@
-# Task 1
-Implement shell for authentication behaviours.
-
+# Task 2
+Implement ForexScore Playground - search FocusPair
 
 ## Details
-To For the purpose of proceedeing faster to implement the forexscore playground, we only need to implement the shell and core necessities for the Authentication behaviour for now.
-Such that we may go through the states appropriately
+We have a specific Set ot ForexPairs available (actually we have all combinations available but we want to only consider the list in the config `shownCurrencyPairLabels`). Now We need Combobox Search Element on the Top-left where we choose one Currency pair to focus on. 
+We had such a Combobox Implemented somewhereelse so I added the relevant sample code from there in the forexscoreframemodule. The files with the sample code is: comboboxfun.coffee seasonality.styl and seasonalityframe.pug
 
-
-## Sub-Task
-- [ ] Reflect on and document desired authentication behaviour.
-- [ ] Implement top-level APIs towards the rest of the application to be usable with the correct Flow inside the UI
-- [ ] Implement core necessities - e.g. locked key storage etc. such that we may distinguish the auth-states based on actual "real" state. 
+## Sub-Tasks
+- [ ] add relevant structure in the forexscoreframemodule/forexscoreframe.pug
+- [ ] add relevant style in the forexscoreframemodule/styles.styl
+- [ ] adjust the code in comboboxfun.coffee and use it from forexscoreframemodule/forexscoreframemodule.coffee
+- [ ] test the implementation and fix the issues

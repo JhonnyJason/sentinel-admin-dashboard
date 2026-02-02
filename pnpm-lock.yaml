@@ -17,9 +17,6 @@ importers:
       coffeescript:
         specifier: ^2.7.0
         version: 2.7.0
-      fft.js:
-        specifier: ^4.0.4
-        version: 4.0.4
       html-minifier:
         specifier: ^4.0.0
         version: 4.0.0
@@ -47,6 +44,9 @@ importers:
       purgecss:
         specifier: ^8.0.0
         version: 8.0.0
+      qr-scanner:
+        specifier: ^1.4.2
+        version: 1.4.2
       secret-manager-crypto-utils:
         specifier: ^0.3.1
         version: 0.3.1
@@ -56,6 +56,12 @@ importers:
       thingy-allmodules-sync:
         specifier: ^0.2.0
         version: 0.2.0
+      thingy-byte-utils:
+        specifier: ^0.0.8
+        version: 0.0.8
+      thingy-crypto-node:
+        specifier: ^0.0.2
+        version: 0.0.2
       thingy-debug:
         specifier: ^0.0.1
         version: 0.0.1
@@ -224,6 +230,9 @@ packages:
 
   '@types/normalize-package-data@2.4.4':
     resolution: {integrity: sha512-37i+OaWTh9qeK4LSHPsyRC7NahnGotNuZvjLSgcPzblpHB3rrCJxAOgI5gCdKm7coonsaX1Of0ILiTcnZjbfxA==}
+
+  '@types/offscreencanvas@2019.7.3':
+    resolution: {integrity: sha512-ieXiYmgSRXUDeOntE1InxjWyvEelZGP63M+cGuquuRLuIKKT1osnkXjxev9B7d1nXSug5vpunx+gNlbVxMlC9A==}
 
   '@webassemblyjs/ast@1.14.1':
     resolution: {integrity: sha512-nuBEDgQfm1ccRp/8bCQrx1frohyufl4JlbMMZ4P1wpeOfDhF6FQkxZJ1b/e+PLwr6X1Nhw6OLme5usuBWYBvuQ==}
@@ -1032,9 +1041,6 @@ packages:
 
   fastq@1.20.1:
     resolution: {integrity: sha512-GGToxJ/w1x32s/D2EKND7kTil4n8OVk/9mycTc4VDza13lOvpUZTGX3mFSCtV9ksdGBVzvsyAVLM6mHFThxXxw==}
-
-  fft.js@4.0.4:
-    resolution: {integrity: sha512-f9c00hphOgeQTlDyavwTtu6RiK8AIFjD6+jvXkNkpeQ7rirK3uFWVpalkoS4LAwbdX7mfZ8aoBfFVQX1Re/8aw==}
 
   figures@3.2.0:
     resolution: {integrity: sha512-yaduQFRKLXYOGgEn6AZau90j3ggSOyiqXU0F9JZfeXYhNa+Jk4X+s45A2zg5jns87GAFa34BBm2kXw4XpNcbdg==}
@@ -2019,6 +2025,9 @@ packages:
     resolution: {integrity: sha512-QFJyps9y5oHeXnNA3Ql1EaAqWBivNwQn19Pw1lt9RxfB+4e+bIyqCyuombk79D6Fxe+lPXggVfI1WtRGEBwgbQ==}
     hasBin: true
 
+  qr-scanner@1.4.2:
+    resolution: {integrity: sha512-kV1yQUe2FENvn59tMZW6mOVfpq9mGxGf8l6+EGaXUOd4RBOLg7tRC83OrirM5AtDvZRpdjdlXURsHreAOSPOUw==}
+
   qs@6.5.3:
     resolution: {integrity: sha512-qxXIEh4pCGfHICj1mAJQ2/2XVZkjCDTcEgfoSQxc/fYivUZxTkk7L3bDBJSoNrEzXI17oUO5Dp07ktqE5KzczA==}
     engines: {node: '>=0.6'}
@@ -2506,6 +2515,9 @@ packages:
 
   thingy-byte-utils@0.0.8:
     resolution: {integrity: sha512-m9+aSv0XrU1g6Da61Qq0ZnyflSYx1/uWfD98UFziOV4WMrEzE5eHTjXGhxhFRzauL3EkwujZZJbOBxj8PzHyAg==}
+
+  thingy-crypto-node@0.0.2:
+    resolution: {integrity: sha512-wFpB8evuisJbZ/ZZmYEkcvfwJs5Ls16Co4G9wl4AQg4h8jZjN+b0a1Kj+X+2nEDsySp+iTO68xJAznjIpf0J3w==}
 
   thingy-debug@0.0.1:
     resolution: {integrity: sha512-PBIOqHt1KXDsMENJip89IwzZhc8vhv88rp7aw89O+hfSQA5QMqOxAjaILGmPK2H+yeePyTuTBWqTfHCWW6vNDQ==}
@@ -3043,6 +3055,8 @@ snapshots:
       undici-types: 7.16.0
 
   '@types/normalize-package-data@2.4.4': {}
+
+  '@types/offscreencanvas@2019.7.3': {}
 
   '@webassemblyjs/ast@1.14.1':
     dependencies:
@@ -3978,8 +3992,6 @@ snapshots:
   fastq@1.20.1:
     dependencies:
       reusify: 1.1.0
-
-  fft.js@4.0.4: {}
 
   figures@3.2.0:
     dependencies:
@@ -5052,6 +5064,10 @@ snapshots:
       postcss: 8.5.6
       postcss-selector-parser: 7.1.1
 
+  qr-scanner@1.4.2:
+    dependencies:
+      '@types/offscreencanvas': 2019.7.3
+
   qs@6.5.3: {}
 
   query-string@6.14.1:
@@ -5644,6 +5660,10 @@ snapshots:
       mustache: 4.2.0
 
   thingy-byte-utils@0.0.8: {}
+
+  thingy-crypto-node@0.0.2:
+    dependencies:
+      secret-manager-crypto-utils: 0.3.1
 
   thingy-debug@0.0.1: {}
 

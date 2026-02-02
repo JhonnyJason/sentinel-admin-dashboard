@@ -42,8 +42,9 @@ plan/               # Project planning docs
 - debugmodule, domconnect, index, utilsmodule
 
 **Auth:**
-- authmodule (logic: isAuthenticated, getAuthCode)
-- authframemodule (UI: show/hide)
+- authmodule (logic: entry state detection, key management, crypto ops)
+- authframemodule (UI: setup/unlock/inaccessible views)
+- See `sources/source/authmodule/README.md` for detailed auth flow
 
 **UI/Layout:**
 - headermodule, sidenavmodule, contentmodule
@@ -69,8 +70,7 @@ plan/               # Project planning docs
 - `usermanagement` - Placeholder
 
 ## Current State
-Phase: Planning (v0.1.0)
+Phase: Implementation (v0.1.0)
 - Task 0 complete: Project cleanup done
-- Navigation rewired for admin use
-- Auth stubs in place
-- Ready for feature implementation
+- Task 1 in progress: Auth shell implementation
+- Auth behaviour documented (see authmodule/README.md)
