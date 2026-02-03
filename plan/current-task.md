@@ -1,84 +1,70 @@
-# Task 4
-Implement manipulation of makrodata on FocusPair
+# Task 5
+Implement ForexScore Playground - FocusPair display parameter controls and calculation results
 
-## Details
-We always have a FocusPair on display - two elements where each represents an economic area containing the makrodata.
-These makrodata originally come from the backend (mocked for now) and are the current "real" data. However for experimenting we might want to test different makroconditions for this purpose we want to be able to manipulate each value.
-We only keep them temporarily while we experiment with one focus pair. If we select a different focuspair, we start off with the "real" values.
-Also we want some indication to know which values are currently manipulated.
-And last but not least we want to be able to reset those values to their current "real" value.
 
----
+# Details
+We need a good visualizaion for the current parameters. Therefore we need to full picture and the full pipline what needs to be shown. Probably we need som sort of 3 Column layout while the top with the search combobox is outside of that.
+So currently we have 2 elements. Naturally they are row 1 and column 1 and  column 2 respectively. Column 3 is emtpy - Here we can add the Endresults of the current calculation.
 
-## Prerequisite: Data Pipeline Fix
+It would be great if the Endresult looks similar to the results in currencytrendframemodule.
+Also all the inspiration how it is calculated shall com from there.
 
-Before implementing manipulation, we need to establish the correct data flow architecture.
+Currently we only have the stWeights applied. They are for short term results. For real we also want to apply different weights for middle longterm results (mlWeights) and long-term results (ltWeights).
+We want to have the 3 result Elements in the element on row 1 and column 3. If we have space we may add on top of each element the calculation for it where we see the weights as number and the InfScore, mrrScore, gdpScore and cotScore as uneditable fields with ther color as background simply being their respective end-results.
 
-### Problem
-Currently `focuspairmodule` imports `mockAreaData` directly from `configmodule`, bypassing the natural data pipeline. This needs correction.
+We need colors that symbolize each of those 4 parts. maybe some yellowish for the cotScore, some purpoe for mrrScore some blueish for infScore and some greenish for gdpScore.
 
-### Target Architecture
+in Row 2 we need the normalization functions. Here we can take the smaller elements in height where each is dealing with one of the values.
+Naturally column 1 is dealing with the normalizations regarding the baseArea while column 2 is is dealing with the normalization regarding the quoteArea. For most this function is a polynomial of second order and a negative one. To be more intuitive, we want to be able to control the location for the peak  and steepness of the function.
+As easy visualization we display the value for lowZero and the highZero.
+As defined in the calcuation and scoring-design.md the results are to be between 0-3 - probably we should upgrade this to be in between 0-2 As a normalized result.
+The normalized result for the specific value is displayed as constant uneditable number in a similar style as the other uneditable endresult (backgroud color).
+
+For each of those Rows the 3rd column display the diffFunction where the global Parameters for the diffFunction are to be edited, the inputs from the basArea and quoteArea are similar uneditable constants with the respective background color. And also the result is such a uneditable constant there.
+
+To be limited in with for a number we should always calculate them "toFixed(2)" for display.
+
+
+## Sub-Task
+- [x] reflect and clarify requirements and plan implementation
+- [x] Step 1: Create scoringmodule (calculation engine)
+- [x] Step 2: Layout restructure (3×5 CSS grid)
+- [x] Step 3: Results display (ST/MLT/LT in Column 3, Row 1)
+- [ ] Step 4a: Inf + GDP normalization cells (cols 1-2, quadratic: peak + steepness)
+- [ ] Step 4b: MRR normalization cells (cols 1-2, linear: neutralRate + sensitivity)
+- [ ] Step 4c: COT normalization cells (cols 1-2, f factor)
+- [ ] Step 4d: Inf + GDP diff cells (col 3, b + d curve params)
+- [ ] Step 4e: MRR + COT diff cells (col 3, b + d curve params)
+- [ ] Step 5: Final wiring & test
+
+## Parameter Model (decided)
+
+**Quadratic (Inflation, GDP):**
+- Input: `peak` + `steepness` (1.0 = default)
+- Display: `zeroLow`, `zeroHigh` as feedback
+- Internal: `a, b, c` coefficients
+
+**Linear (Interest/MRR):**
+- Input: `neutralRate` + `sensitivity`
+- Internal: `a`, `b`
+
+**COT:** `f` factor only
+
+## Layout
 ```
-Backend (WebSocket)
-       ↓
-datamodule (receives allData, relays to consumers)
-       ↓
-economicareasmodule (stores all 8 EconomicArea objects)
-       ↓
-focuspairmodule (reads "real" data, clones for volatile experiments)
+┌─────────────────────────────────────────────────────────────┐
+│  [Search Combobox]                                          │
+├───────────────────┬───────────────────┬─────────────────────┤
+│ Row 1: Base Area  │ Quote Area        │ Results (ST/MLT/LT) │
+├───────────────────┼───────────────────┼─────────────────────┤
+│ Row 2: Inf Norm   │ Inf Norm          │ Inf Diff            │
+├───────────────────┼───────────────────┼─────────────────────┤
+│ Row 3: MRR Norm   │ MRR Norm          │ MRR Diff            │
+├───────────────────┼───────────────────┼─────────────────────┤
+│ Row 4: GDP Norm   │ GDP Norm          │ GDP Diff            │
+├───────────────────┼───────────────────┼─────────────────────┤
+│ Row 5: COT Norm   │ COT Norm          │ COT Diff            │
+└───────────────────┴───────────────────┴─────────────────────┘
 ```
 
-### Admin Dashboard Data Flow Characteristics
-- **One-time read**: Data arrives once on connection (mocked for now)
-- **Write-only after**: After initial population, admin only pushes changes (params, history queries)
-- **No live updates**: Unlike user dashboard, no ongoing data stream from backend
-
-### EconomicArea Pattern
-The `EconomicArea` class maintains:
-- Data storage (`@data`, `@metaData`)
-- Normalization parameters (`@inflationParams`, etc.)
-- Internal DOM element (always updated, but detached — can be mounted or ignored)
-- Scoring/normalization functions
-
-This allows:
-- User dashboard: mounts `area.getElement()` directly
-- Admin dashboard: reads `area.getData()` / `area.getParams()`, renders custom UI
-
----
-
-## Implementation Plan
-
-### Step 1: Revive economicareasmodule
-- Uncomment the 8 area definitions
-- Add `getArea(key)` accessor
-- Add `updateAllAreas(data)` function for bulk population
-- Ensure areas work with detached DOM (no dependency on being mounted)
-
-### Step 2: Wire datamodule → economicareasmodule
-- On mock "connection": call `updateAllAreas(mockAreaData)`
-- After population: call `focuspairmodule.populateCurrentFocusPair()`
-- This ensures default FocusPair displays with real data
-
-### Step 3: Update focuspairmodule
-- Remove direct import of `mockAreaData` from configmodule
-- Import from `economicareasmodule.getArea(key)` instead
-- Add `populateCurrentFocusPair()` function (called after data arrives)
-- Clone area data for volatile experiment state
-
-### Step 4: Implement manipulation (original Task 4)
-- Working data state (cloned from real)
-- Input fields for editing values
-- Visual indication of modified values (CSS class)
-- Reset button per area
-
----
-
-## Sub-Tasks
-- [x] Reflect and plan how we should implement the manipulation of these values
-- [x] Step 1: Revive economicareasmodule
-- [x] Step 2: Wire datamodule → economicareasmodule
-- [x] Step 3: Update focuspairmodule to use new data flow
-- [x] Step 4a: Implement manipulation (input fields, working state)
-- [x] Step 4b: Make manipulated values visible (CSS indication)
-- [x] Step 4c: Implement reset functionality
-- [x] Test and fix issues
+**Colors:** Inf=blue, MRR=purple, GDP=green, COT=yellow

@@ -5,7 +5,7 @@
 - [x] Admin Authentication - unlock key for usage
 - [x] ForexScore Playground - search FocusPair
 - [x] ForexScore Playground - FocusPair display (basic display done, testing)
-- [ ] ForexScore Playground - FocusPair makrodata value manipulation
+- [x] ForexScore Playground - FocusPair makrodata value manipulation
 - [ ] ForexScore Playground - FocusPair display parameter controls and calculation results
 - [ ] ForexScore Playground - FocusPair parameter adjustment (normalization functions)
 - [ ] ForexScore Playground - Global Parameters display (diff functions + final combination weights)

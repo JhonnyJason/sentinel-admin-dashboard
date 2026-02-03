@@ -75,12 +75,17 @@ Phase: Implementation (v0.1.0)
 - Task 1 complete: Auth implementation
 - Task 2 complete: FocusPair search (combobox with 28 pairs)
 - Task 3 complete: FocusPair display (basic)
-- Task 4 in progress: Makrodata manipulation
-  - Step 1 complete: economicareasmodule revived
-  - Step 2 complete: datamodule → economicareasmodule wired
-  - Step 3 complete: focuspairmodule reads from economicareasmodule
-  - Step 4 complete: manipulation UI (inputs, modified state, reset)
-  - Next: Test end-to-end
+- Task 4 complete: Makrodata manipulation
+- Task 5 in progress: Parameter controls & calculation results
+  - [x] Step 1: Create scoringmodule (calculation engine)
+  - [x] Step 2: Layout restructure (3×5 grid)
+  - [x] Step 3: Results display (ST/MLT/LT)
+  - [ ] Step 4a: Inf + GDP norm cells (quadratic)
+  - [ ] Step 4b: MRR norm cells (linear)
+  - [ ] Step 4c: COT norm cells (f factor)
+  - [ ] Step 4d: Inf + GDP diff cells
+  - [ ] Step 4e: MRR + COT diff cells
+  - [ ] Step 5: Final wiring & test
 
 ## Data Architecture (ForexScore Playground)
 See `sources/source/datamodule/README.md` for full spec.
