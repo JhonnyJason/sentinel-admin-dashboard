@@ -53,21 +53,43 @@ See `sources/source/authmodule/README.md` for full documentation.
 ## Reference Code for ForexScore Playground
 - `currencytrendframemodule` - Contains forex scoring visualization
 - `economicareamodule` - Contains economic area scoring logic
+- `scorehelper.coffee` - Diff curves, color/trend mapping
+
+## ForexScore Playground Key Files
+- `forexscoreframemodule/focuspairmodule.coffee` - FocusPair display management
+- `configmodule.coffee` - Mock data, neutral defaults, currency→area mapping
+- `datamodule/README.md` - Data contract specification
+
+## Scoring Pipeline (Reference)
+1. Raw makro data → area normalization (per-area params)
+2. Normalized scores → diff calculation (base - quote)
+3. Diff → diff curves (global params)
+4. Individual scores → weighted combination (global weights)
 
 ## Completed
 - [x] Task 0: Project cleanup and orientation
-- [x] Removed user-facing modules (account*, summary*, trafficlight*, etc.)
-- [x] Rewired navigation (auth, forexscore, usermanagement)
-- [x] Created auth stubs (authmodule, authframemodule)
-- [x] Fixed all imports and references
 - [x] Task 1: Auth implementation
-  - Auth behaviour documented
-  - Entry state detection & module API
-  - Authframe internal views (keySetup, keyLocked, inaccessible)
-  - Key Setup flow (server call stubbed)
-  - Key Unlock flow with retry logic
+- [x] Task 2: ForexScore Playground - FocusPair search
+- [x] Task 3: ForexScore Playground - FocusPair display (basic)
+- [x] Task 4 Step 1: Revive economicareasmodule
+  - Added `initialize()`, `createAllAreas()` with 8 areas
+  - Added accessors: `getArea(key)`, `getAllAreas()`, `updateAllAreas(data)`
+  - EconomicArea class has `getData()`, `getParams()`, `getInfo()` for cloning
+- [x] Task 4 Step 2: Wire datamodule → economicareasmodule
+  - datamodule imports economicareasmodule
+  - Added `loadMockData()` → calls `areas.updateAllAreas(cfg.mockAreaData)`
+  - heartbeat triggers `loadMockData()` when socket OPEN and !dataReceived
+  - Real backend flow prepared (commented) for when backend supports protocol
+  - economicareasmodule.updateData() handles missing meta fields gracefully
+- [x] Task 4 Step 3: focuspairmodule reads from economicareasmodule
+- [x] Task 4 Step 4: Data manipulation implemented
+  - `workingData` / `realData` state tracking per area (base/quote)
+  - Input fields replace static spans (styled invisible, number type)
+  - `.modified` class on inputs when value differs from real
+  - Reset button per area (hidden until modifications exist)
+  - Styles split: combobox.styl, focuspair.styl imported into styles.styl
 
 ## Next Actions
-1. Implement ForexScore Playground
-2. (Later) User Management feature
-3. (Later) Wire up actual server calls when backend ready
+1. Test manipulation flow end-to-end
+2. (Later) Wire up actual backend calls
+3. (Later) User Management feature

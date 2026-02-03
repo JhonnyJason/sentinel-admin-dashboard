@@ -72,5 +72,28 @@ plan/               # Project planning docs
 ## Current State
 Phase: Implementation (v0.1.0)
 - Task 0 complete: Project cleanup done
-- Task 1 in progress: Auth shell implementation
-- Auth behaviour documented (see authmodule/README.md)
+- Task 1 complete: Auth implementation
+- Task 2 complete: FocusPair search (combobox with 28 pairs)
+- Task 3 complete: FocusPair display (basic)
+- Task 4 in progress: Makrodata manipulation
+  - Step 1 complete: economicareasmodule revived
+  - Step 2 complete: datamodule → economicareasmodule wired
+  - Step 3 complete: focuspairmodule reads from economicareasmodule
+  - Step 4 complete: manipulation UI (inputs, modified state, reset)
+  - Next: Test end-to-end
+
+## Data Architecture (ForexScore Playground)
+See `sources/source/datamodule/README.md` for full spec.
+
+**Data Flow:**
+- `getAllData` → initial load (makro data + params)
+- WebSocket → fine-grained updates
+- Admin actions → `saveParams` (experimental) / `publishParams` (checkpoint)
+
+**Parameter Structure:**
+- Area params (per economic area): inflation, interest, gdp, cot normalization
+- Global params: diff curves + combination weights
+
+**Defaults:**
+- Neutral defaults → UI config only (calculated balanced values)
+- Last published → server-side checkpoint for reset
