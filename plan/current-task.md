@@ -16,7 +16,7 @@ On one side we have the makrodata + area-specific normalization parameters store
   - [x] playgroundcontroller basic implementation
   - [x] EconomicArea.isModified property added
   - [x] forexscoreplayground delegates to playgroundcontroller
-  - [ ] **BLOCKED: Listener cleanup on pair switch**
+  - [x] **BLOCKED: Listener cleanup on pair switch**
 - [ ] Step 4a: Inf + GDP normalization cells (cols 1-2, quadratic: peak + steepness)
 - [ ] Step 4b: MRR normalization cells (cols 1-2, linear: neutralRate + sensitivity)
 - [ ] Step 4c: COT normalization cells (cols 1-2, f factor)
