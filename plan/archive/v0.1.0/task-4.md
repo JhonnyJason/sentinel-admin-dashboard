@@ -36,13 +36,13 @@ focuspairmodule (reads "real" data, clones for volatile experiments)
 ### EconomicArea Pattern
 The `EconomicArea` class maintains:
 - Data storage (`@data`, `@metaData`)
-- Normalization parameters (`@inflationParams`, etc.)
+- Normalization parameters (`@inflParams`, etc.)
 - Internal DOM element (always updated, but detached — can be mounted or ignored)
 - Scoring/normalization functions
 
 This allows:
 - User dashboard: mounts `area.getElement()` directly
-- Admin dashboard: reads `area.getData()` / `area.getParams()`, renders custom UI
+- Admin dashboard: reads `area.copyData()` / `area.copyParams()`, renders custom UI
 
 ---
 

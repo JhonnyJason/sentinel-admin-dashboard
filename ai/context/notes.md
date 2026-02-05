@@ -5,6 +5,9 @@
 - `pnpm run deployment-build` - Create production build
 - `pnpm run check-deployment` - Build and serve deployment locally
 
+## Build System Note
+All CoffeeScript files are transpiled into a single directory. This means `./modulename.js` imports work regardless of source folder structure.
+
 ## Key Files
 - `sources/source/allmodules/allmodules.coffee` - Module registry (auto-generated)
 - `sources/source/configmodule/configmodule.coffee` - App configuration
@@ -28,37 +31,8 @@ Each module folder typically contains:
 | `forexscore` | forexscore | forexscore | hidden | logged-in |
 | `usermanagement` | usermanagement | usermanagement | hidden | logged-in |
 
-**Note:** UI states and navtriggers are for *navigatable* UI states only. Internal states of smaller UI parts (like auth flow states within authframe) are handled internally by the specific frame and are not navigatable unless explicitly needed.
-
 ## Auth Flow
 See `sources/source/authmodule/README.md` for full documentation.
-
-**Entry States (on app start):**
-| Condition | Action |
-|-----------|--------|
-| URL has `?otc=<32 hex>` | → Key Setup |
-| No otc, has localStorage `key-info` | → Key Unlock |
-| No otc, no key-info | → "Not Accessible" |
-
-**Key Setup:** PIN → recover secret → generate curve25519 key → POST /registerAdmin (stubbed) → QR scan → lock & store
-**Key Unlock:** read key-info → QR scan (with retries) → XOR unlock → validate via targetHash → proceed
-
-**localStorage `key-info`:**
-```
-{ lockedKey, targetHash, salt, lockType: "qr" }
-```
-
-**Config needed:** pwdSalt (fixed constant for secret recovery)
-
-## Reference Code for ForexScore Playground
-- `currencytrendframemodule` - Contains forex scoring visualization
-- `economicareamodule` - Contains economic area scoring logic
-- `scorehelper.coffee` - Diff curves, color/trend mapping
-
-## ForexScore Playground Key Files
-- `forexscoreframemodule/focuspairmodule.coffee` - FocusPair display management
-- `configmodule.coffee` - Mock data, neutral defaults, currency→area mapping
-- `datamodule/README.md` - Data contract specification
 
 ## Scoring Pipeline (Reference)
 1. Raw makro data → area normalization (per-area params)
@@ -71,23 +45,7 @@ See `sources/source/authmodule/README.md` for full documentation.
 - [x] Task 1: Auth implementation
 - [x] Task 2: ForexScore Playground - FocusPair search
 - [x] Task 3: ForexScore Playground - FocusPair display (basic)
-- [x] Task 4 Step 1: Revive economicareasmodule
-  - Added `initialize()`, `createAllAreas()` with 8 areas
-  - Added accessors: `getArea(key)`, `getAllAreas()`, `updateAllAreas(data)`
-  - EconomicArea class has `getData()`, `getParams()`, `getInfo()` for cloning
-- [x] Task 4 Step 2: Wire datamodule → economicareasmodule
-  - datamodule imports economicareasmodule
-  - Added `loadMockData()` → calls `areas.updateAllAreas(cfg.mockAreaData)`
-  - heartbeat triggers `loadMockData()` when socket OPEN and !dataReceived
-  - Real backend flow prepared (commented) for when backend supports protocol
-  - economicareasmodule.updateData() handles missing meta fields gracefully
-- [x] Task 4 Step 3: focuspairmodule reads from economicareasmodule
-- [x] Task 4 Step 4: Data manipulation implemented
-  - `workingData` / `realData` state tracking per area (base/quote)
-  - Input fields replace static spans (styled invisible, number type)
-  - `.modified` class on inputs when value differs from real
-  - Reset button per area (hidden until modifications exist)
-  - Styles split: combobox.styl, focuspair.styl imported into styles.styl
+- [x] Task 4: Makrodata manipulation
 
 ## Task 5: Parameter Controls & Calculation Results
 
@@ -97,36 +55,127 @@ Quadratic normalization (Inflation, GDP):
 - User inputs: `peak` + `steepness` (steepness=1.0 is default)
 - Feedback display: `zeroLow`, `zeroHigh` (derived)
 - Internal: `a, b, c` coefficients
-- Math: width = default_width / steepness, then derive a,b,c
 
 Linear normalization (Interest/MRR):
 - User inputs: `neutralRate` + `sensitivity`
 - Internal: `a = -sensitivity * neutralRate`, `b = sensitivity`
 
-COT: just `f` factor
+COT: `f` factor + `e` exponent
 
 **Layout (3 columns × 5 rows):**
 - Row 1: Base Area | Quote Area | Final Results (ST/MLT/LT)
-- Row 2: Inf Norm (base) | Inf Norm (quote) | Inf Diff
-- Row 3: MRR Norm (base) | MRR Norm (quote) | MRR Diff
-- Row 4: GDP Norm (base) | GDP Norm (quote) | GDP Diff
-- Row 5: COT Norm (base) | COT Norm (quote) | COT Diff
+- Row 2-5: Norm cells (cols 1-2) | Diff cells (col 3)
 
 **Colors:** Inf=blue, MRR=purple, GDP=green, COT=yellow
 
 **Implementation Steps:**
-1. [x] scoringmodule - calculation engine
+1. [x] ScoringModel class
 2. [x] Layout restructure (CSS grid)
-3. [x] Results display (Column 3, Row 1)
-4. Normalization & Diff rows (split for testability):
-   - [ ] 4a: Inf + GDP norm cells (cols 1-2) - quadratic: peak + steepness
-   - [ ] 4b: MRR norm cells (cols 1-2) - linear: neutralRate + sensitivity
-   - [ ] 4c: COT norm cells (cols 1-2) - f factor
-   - [ ] 4d: Inf + GDP diff cells (col 3) - b + d curve params
-   - [ ] 4e: MRR + COT diff cells (col 3) - b + d curve params
-5. Final wiring & test
+3. [x] Results display structure
+4. [~] **Step 3.5: Wiring refactoring** ← CURRENT (partial)
+   - [x] ScoringModel created
+   - [x] playgroundcontroller implemented (basic)
+   - [x] EconomicArea.isModified property added
+   - [ ] **BLOCKED: Listener cleanup issue** (see below)
+5. Normalization & Diff rows (pending)
+6. Final wiring & test
+
+## ForexScore Playground Architecture
+
+### Key Classes
+
+| Class | Location | Role |
+|-------|----------|------|
+| `EconomicArea` | economicareamodule/ | Per-area: data + params + score functions. Has updateListeners + isModified. |
+| `ScoringModel` | playgroundcontroller/ | Pair-level: diff params + weights + calculation. Has updateListeners. |
+| `playgroundcontroller` | playgroundcontroller/ | Orchestrator: original/live areas, wires handles, triggers recalc. |
+
+### Data Flow
+
+```
+economicareasmodule (original backend data)
+       │
+       ▼
+playgroundcontroller.initialize()
+       │ store originals, clone to liveAreas
+       │ create ScoringModel
+       ▼
+playgroundcontroller.setFocusPair(baseKey, quoteKey)
+       │ add controller listener to liveArea (FIRST)
+       │ call handle.setArea(liveArea) → adds UI listener (SECOND)
+       │ add reset listener to handle
+       │ wire scoringModel to resultBoxHandle
+       ▼
+User edits data → area.updateData() → listeners fire in order:
+  1. Controller: compare to original, set isModified, recalculate
+  2. UI: refreshUI sees updated isModified, updates display
+```
+
+### Handle Classes
+- `MakroDataHandle.coffee` - implemented, wired via playgroundcontroller
+- `ResultBoxHandle.coffee` - implemented, wired to ScoringModel
+- `QuadNormHandle.coffee` - skeleton
+- `LinNormHandle.coffee` - skeleton
+- `CotNormHandle.coffee` - skeleton
+- `DiffHandle.coffee` - skeleton
+- `uihandles.coffee` - instantiates all handles
+
+---
+
+## KNOWN ISSUE: Listener Accumulation on Pair Switch
+
+### Problem
+When `setFocusPair` is called multiple times (user switches pairs), listeners accumulate without cleanup:
+
+| Location | What's Added | Added To |
+|----------|--------------|----------|
+| `playgroundcontroller.setFocusPair` | `-> onAreaUpdate(key)` | liveArea (EconomicArea) |
+| `MakroDataHandle.setArea` | `@refreshUI` | area (EconomicArea) |
+| `playgroundcontroller.setFocusPair` | `-> resetArea(key)` | handle (MakroDataHandle) |
+| `ResultBoxHandle.setModel` | `@refreshUI` | scoringModel |
+
+**Scenario:** User selects EURUSD, then EURJPY
+- EUR liveArea gets duplicate `onAreaUpdate` listeners
+- EUR liveArea gets duplicate `refreshUI` listeners
+- baseAreaHandle gets duplicate reset listeners
+
+### Solution Approach (TODO)
+
+**1. playgroundcontroller** - track and cleanup:
+```coffee
+prevBaseKey = null
+prevQuoteKey = null
+baseListener = null   # store function reference
+quoteListener = null
+
+# In setFocusPair, before adding new:
+if prevBaseKey and baseListener
+    liveAreas[prevBaseKey]?.removeUpdateListener(baseListener)
+# ... then create new listener, store reference, add it
+```
+
+**2. MakroDataHandle.setArea** - cleanup old listener:
+```coffee
+# Store @areaListener = @refreshUI bound
+# If @area exists, @area.removeUpdateListener(@areaListener)
+# Then add new listener
+```
+
+**3. MakroDataHandle reset listeners** - clear on setArea:
+```coffee
+@resetListeners = []  # in setArea, before adding new
+```
+
+**4. ResultBoxHandle.setModel** - same pattern as MakroDataHandle
+
+### Status
+Documented for later. Current implementation works for single pair selection but will have issues if user switches pairs frequently.
+
+---
 
 ## Next Actions
-1. Implement Step 4a: Inf + GDP normalization cells
-2. (Later) Wire up actual backend calls
-3. (Later) User Management feature
+1. **Fix listener cleanup issue** (documented above)
+2. Complete skeleton Handle classes (QuadNorm, LinNorm, CotNorm, Diff)
+3. Test full wiring flow
+4. (Later) Wire up actual backend calls
+5. (Later) User Management feature
