@@ -19,7 +19,7 @@ On one side we have the makrodata + area-specific normalization parameters store
   - [x] **BLOCKED: Listener cleanup on pair switch**
   - [x] Combobox issue: the dropdown menu does not open after selection was accepted via Enter
   - [x] playgroundcontroller - switching focusPair after modifiert rawData leads to false modification indicators.
-  - [ ] assure that the wiring of the ScoreModule works properly such that the real current calculation results are shown in the Result Box
+  - [x] assure that the wiring of the ScoreModule works properly such that the real current calculation results are shown in the Result Box
   - [ ] check function of editable finalWeights 
 - [ ] Step 4a: Inf + GDP normalization cells (cols 1-2, quadratic: peak + steepness)
 - [ ] Step 4b: MRR normalization cells (cols 1-2, linear: neutralRate + sensitivity)
