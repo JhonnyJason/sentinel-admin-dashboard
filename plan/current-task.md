@@ -21,18 +21,17 @@ On one side we have the makrodata + area-specific normalization parameters store
   - [x] playgroundcontroller - switching focusPair after modifiert rawData leads to false modification indicators.
   - [x] assure that the wiring of the ScoreModule works properly such that the real current calculation results are shown in the Result Box
   - [x] check function of editable finalWeights 
-- [ ] Step 4a: Inf + GDP normalization cells (cols 1-2, quadratic: peak + steepness)
+- [~] Step 4a: Inf + GDP normalization cells (cols 1-2, quadratic: peak + steepness)
+  - [x] quadnorm-el.pug - equation display (n(x) = a + b·x + c·x² = result)
+  - [x] normmath.coffee - param conversion utilities (from deprecated scoringmodule)
+  - [x] QuadNormHandle - input wiring, refreshUI, onParamInput
+  - [x] Wire QuadNormHandle into playgroundcontroller
+  - [x] Style quadnorm-el.styl
 - [ ] Step 4b: MRR normalization cells (cols 1-2, linear: neutralRate + sensitivity)
 - [ ] Step 4c: COT normalization cells (cols 1-2, f factor)
 - [ ] Step 4d: Inf + GDP diff cells (col 3, b + d curve params)
 - [ ] Step 4e: MRR + COT diff cells (col 3, b + d curve params)
 - [ ] Step 5: Final wiring & test
-
-## Incoming New Tasks (unrelated to this project)
-- [x] do accounting
-- [x] read Messages from Eric -> write down Tasks
-- [ ] start experimental feature in SusDoX webviewer
-- [ ] pay accounting invoice
 
 ## BLOCKED: Listener Cleanup Issue
 
@@ -82,3 +81,9 @@ When switching pairs, listeners accumulate without cleanup. See `ai/context/note
 - `economicareamodule/EconomicArea.coffee` - added `@isModified = false`
 - `playgroundcontroller/playgroundcontroller.coffee` - full implementation
 - `forexscoreplayground/forexscoreplayground.coffee` - simplified to delegate to controller
+- `forexscoreplayground/normmath.coffee` - NEW: param conversion utilities (from deprecated scoringmodule)
+- `forexscoreplayground/QuadNormHandle.coffee` - full implementation (input wiring + equation display)
+- `forexscoreplayground/components/quadnorm-el.pug` - equation with coefficient spans
+
+## Note: Deprecated Modules
+`forexscoreframemodule/scoringmodule.coffee` and `focuspairmodule.coffee` are leftovers from a prior refactoring. Do not import from them. Conversion functions now live in `forexscoreplayground/normmath.coffee`.

@@ -71,7 +71,7 @@ Phase: Implementation (v0.1.0)
   - [x] Layout restructure (3×5 grid)
   - [x] Results display structure
   - [~] Wiring refactoring (partial - listener cleanup pending)
-  - [ ] Normalization cells (Inf, MRR, GDP, COT)
+  - [~] Normalization cells (QuadNorm done, LinNorm/CotNorm pending)
   - [ ] Diff cells
   - [ ] Final wiring & test
 
@@ -91,6 +91,7 @@ Phase: Implementation (v0.1.0)
 | `playgroundcontroller` | Orchestrator: original/live areas, handle wiring |
 | `MakroDataHandle` | UI for economic area data display/edit |
 | `ResultBoxHandle` | UI for ST/MLT/LT score results |
+| `QuadNormHandle` | UI for quadratic norm params (peak/steepness → a,b,c) |
 
 ### Data Flow
 ```

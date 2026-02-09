@@ -114,11 +114,14 @@ User edits data → area.updateData() → listeners fire in order:
 ### Handle Classes
 - `MakroDataHandle.coffee` - implemented, wired via playgroundcontroller
 - `ResultBoxHandle.coffee` - implemented, wired to ScoringModel
-- `QuadNormHandle.coffee` - skeleton
+- `QuadNormHandle.coffee` - implemented (pug equation + input wiring + refreshUI)
 - `LinNormHandle.coffee` - skeleton
 - `CotNormHandle.coffee` - skeleton
 - `DiffHandle.coffee` - skeleton
 - `uihandles.coffee` - instantiates all handles
+
+### Utility Files
+- `normmath.coffee` - Pure math for param conversions (peak/steepness ↔ a,b,c; neutralRate/sensitivity ↔ a,b; defaultWidths)
 
 ---
 
@@ -173,9 +176,13 @@ Documented for later. Current implementation works for single pair selection but
 
 ---
 
+## Deprecated Modules
+- `forexscoreframemodule/scoringmodule.coffee` - Conversion functions (peakSteepnessToCoeffs etc.) moved to `forexscoreplayground/normmath.coffee`. The scoringmodule and focuspairmodule in forexscoreframemodule are leftovers from a prior refactoring and should not be imported from.
+
 ## Next Actions
 1. **Fix listener cleanup issue** (documented above)
-2. Complete skeleton Handle classes (QuadNorm, LinNorm, CotNorm, Diff)
-3. Test full wiring flow
-4. (Later) Wire up actual backend calls
-5. (Later) User Management feature
+2. Complete skeleton Handle classes (LinNorm, CotNorm, Diff)
+3. Wire QuadNormHandle into playgroundcontroller
+4. Test full wiring flow
+5. (Later) Wire up actual backend calls
+6. (Later) User Management feature
