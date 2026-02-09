@@ -20,7 +20,7 @@ On one side we have the makrodata + area-specific normalization parameters store
   - [x] Combobox issue: the dropdown menu does not open after selection was accepted via Enter
   - [x] playgroundcontroller - switching focusPair after modifiert rawData leads to false modification indicators.
   - [x] assure that the wiring of the ScoreModule works properly such that the real current calculation results are shown in the Result Box
-  - [ ] check function of editable finalWeights 
+  - [x] check function of editable finalWeights 
 - [ ] Step 4a: Inf + GDP normalization cells (cols 1-2, quadratic: peak + steepness)
 - [ ] Step 4b: MRR normalization cells (cols 1-2, linear: neutralRate + sensitivity)
 - [ ] Step 4c: COT normalization cells (cols 1-2, f factor)
@@ -29,10 +29,10 @@ On one side we have the makrodata + area-specific normalization parameters store
 - [ ] Step 5: Final wiring & test
 
 ## Incoming New Tasks (unrelated to this project)
-- [ ] do accounting
-- [ ] pay accounting invoice
-- [ ] read Messages from Eric -> write down Tasks
+- [x] do accounting
+- [x] read Messages from Eric -> write down Tasks
 - [ ] start experimental feature in SusDoX webviewer
+- [ ] pay accounting invoice
 
 ## BLOCKED: Listener Cleanup Issue
 
