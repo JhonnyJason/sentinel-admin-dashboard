@@ -50,9 +50,10 @@ ai/context/         # AI assistant context files
 **ForexScore Playground:**
 - forexscoreframemodule - Container frame
 - forexscoreplayground - Main grid, delegates to playgroundcontroller
-- playgroundcontroller - Orchestrates data flow and handle wiring
+- playgroundcontroller - Orchestrates data flow, handle wiring, snapshotParams/applyParams
 - economicareamodule - EconomicArea class + area instances
 - focuspairselection - Pair selection combobox
+- forexscoreversion - Version control coordinator (store ↔ controller ↔ UI)
 
 **Data/Communication:**
 - datamodule - WebSocket data handling
@@ -65,15 +66,10 @@ ai/context/         # AI assistant context files
 
 ## Current State
 Phase: Implementation (v0.1.0)
-- Task 0-4: Complete
-- Task 5: Parameter controls & calculation results (in progress)
-  - [x] ScoringModel class
-  - [x] Layout restructure (3×5 grid)
-  - [x] Results display structure
-  - [~] Wiring refactoring (partial - listener cleanup pending)
-  - [x] Normalization cells (QuadNorm, LinNorm, CotNorm all implemented)
-  - [ ] Diff cells
-  - [ ] Final wiring & test
+- Task 0-5: Complete
+- Task 6: Version Control (Experiments) - in progress
+  - See `plan/current-task.md` for sub-tasks
+  - See `sources/source/forexscoreversion/README.md` for architecture
 
 ## ForexScore Playground Architecture
 

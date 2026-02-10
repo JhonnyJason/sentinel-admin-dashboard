@@ -46,41 +46,18 @@ See `sources/source/authmodule/README.md` for full documentation.
 - [x] Task 2: ForexScore Playground - FocusPair search
 - [x] Task 3: ForexScore Playground - FocusPair display (basic)
 - [x] Task 4: Makrodata manipulation
+- [x] Task 5: Parameter Controls & Calculation Results
 
-## Task 5: Parameter Controls & Calculation Results
+## Task 6: Version Control (Experiments)
+See `plan/current-task.md` for full details.
+See `sources/source/forexscoreversion/README.md` for architecture.
 
-**Parameter Model:**
-
-Quadratic normalization (Inflation, GDP):
-- User inputs: `peak` + `steepness` (steepness=1.0 is default)
-- Feedback display: `zeroLow`, `zeroHigh` (derived)
-- Internal: `a, b, c` coefficients
-
-Linear normalization (Interest/MRR):
-- User inputs: `neutralRate` + `sensitivity`
-- Internal: `a = -sensitivity * neutralRate`, `b = sensitivity`
-
-COT: `f` factor + `e` exponent (both directly adjustable)
-- `c6 = 0.02 * cot6`, `c36 = 0.02 * cot36` (scaling factors shown as "COT Faktoren")
-- `cot = f * c6 * c36^e`
-
-**Layout (3 columns × 5 rows):**
-- Row 1: Base Area | Quote Area | Final Results (ST/MLT/LT)
-- Row 2-5: Norm cells (cols 1-2) | Diff cells (col 3)
-
-**Colors:** Inf=blue, MRR=purple, GDP=green, COT=yellow
-
-**Implementation Steps:**
-1. [x] ScoringModel class
-2. [x] Layout restructure (CSS grid)
-3. [x] Results display structure
-4. [~] **Step 3.5: Wiring refactoring** ← CURRENT (partial)
-   - [x] ScoringModel created
-   - [x] playgroundcontroller implemented (basic)
-   - [x] EconomicArea.isModified property added
-   - [ ] **BLOCKED: Listener cleanup issue** (see below)
-5. Normalization & Diff rows (pending)
-6. Final wiring & test
+### Key Design Decisions (6.2)
+- **No dirty flag** — ExperimentStore keeps baseSnapshot + liveSnapshot, isModified() compares them
+- **No listeners on store** — forexscoreversion.coffee is the single coordinator (calls store, calls controller, updates UI directly)
+- **forexscoreversion.coffee** is the hub: store ↔ controller ↔ UI all flow through it
+- **playgroundcontroller** gets snapshotParams() and applyParams(snapshot) — the bridge between version control and live playground state
+- **generalParamChanged** → calls forexscoreversion.onParamsChanged() (currently only norm params; diff/weight params deferred)
 
 ## ForexScore Playground Architecture
 
@@ -127,64 +104,11 @@ User edits data → area.updateData() → listeners fire in order:
 
 ---
 
-## KNOWN ISSUE: Listener Accumulation on Pair Switch
-
-### Problem
-When `setFocusPair` is called multiple times (user switches pairs), listeners accumulate without cleanup:
-
-| Location | What's Added | Added To |
-|----------|--------------|----------|
-| `playgroundcontroller.setFocusPair` | `-> onAreaUpdate(key)` | liveArea (EconomicArea) |
-| `MakroDataHandle.setArea` | `@refreshUI` | area (EconomicArea) |
-| `playgroundcontroller.setFocusPair` | `-> resetArea(key)` | handle (MakroDataHandle) |
-| `ResultBoxHandle.setModel` | `@refreshUI` | scoringModel |
-
-**Scenario:** User selects EURUSD, then EURJPY
-- EUR liveArea gets duplicate `onAreaUpdate` listeners
-- EUR liveArea gets duplicate `refreshUI` listeners
-- baseAreaHandle gets duplicate reset listeners
-
-### Solution Approach (TODO)
-
-**1. playgroundcontroller** - track and cleanup:
-```coffee
-prevBaseKey = null
-prevQuoteKey = null
-baseListener = null   # store function reference
-quoteListener = null
-
-# In setFocusPair, before adding new:
-if prevBaseKey and baseListener
-    liveAreas[prevBaseKey]?.removeUpdateListener(baseListener)
-# ... then create new listener, store reference, add it
-```
-
-**2. MakroDataHandle.setArea** - cleanup old listener:
-```coffee
-# Store @areaListener = @refreshUI bound
-# If @area exists, @area.removeUpdateListener(@areaListener)
-# Then add new listener
-```
-
-**3. MakroDataHandle reset listeners** - clear on setArea:
-```coffee
-@resetListeners = []  # in setArea, before adding new
-```
-
-**4. ResultBoxHandle.setModel** - same pattern as MakroDataHandle
-
-### Status
-Documented for later. Current implementation works for single pair selection but will have issues if user switches pairs frequently.
-
----
-
 ## Deprecated Modules
-- `forexscoreframemodule/scoringmodule.coffee` - Conversion functions (peakSteepnessToCoeffs etc.) moved to `forexscoreplayground/normmath.coffee`. The scoringmodule and focuspairmodule in forexscoreframemodule are leftovers from a prior refactoring and should not be imported from.
+- `forexscoreframemodule/scoringmodule.coffee` - Conversion functions moved to `forexscoreplayground/normmath.coffee`. The scoringmodule and focuspairmodule in forexscoreframemodule are leftovers from a prior refactoring and should not be imported from.
 
 ## Next Actions
-1. **Fix listener cleanup issue** (documented above)
-2. Complete skeleton Handle classes (LinNorm, CotNorm, Diff)
-3. Wire QuadNormHandle into playgroundcontroller
-4. Test full wiring flow
-5. (Later) Wire up actual backend calls
-6. (Later) User Management feature
+1. Task 6: Version Control (sub-tasks 6.1-6.5)
+2. (Later) Show full ranking feature
+3. (Later) Wire up actual backend calls
+4. (Later) User Management feature
