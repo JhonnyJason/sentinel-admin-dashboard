@@ -60,7 +60,9 @@ Linear normalization (Interest/MRR):
 - User inputs: `neutralRate` + `sensitivity`
 - Internal: `a = -sensitivity * neutralRate`, `b = sensitivity`
 
-COT: `f` factor + `e` exponent
+COT: `f` factor + `e` exponent (both directly adjustable)
+- `c6 = 0.02 * cot6`, `c36 = 0.02 * cot36` (scaling factors shown as "COT Faktoren")
+- `cot = f * c6 * c36^e`
 
 **Layout (3 columns × 5 rows):**
 - Row 1: Base Area | Quote Area | Final Results (ST/MLT/LT)
@@ -115,8 +117,8 @@ User edits data → area.updateData() → listeners fire in order:
 - `MakroDataHandle.coffee` - implemented, wired via playgroundcontroller
 - `ResultBoxHandle.coffee` - implemented, wired to ScoringModel
 - `QuadNormHandle.coffee` - implemented (pug equation + input wiring + refreshUI)
-- `LinNormHandle.coffee` - skeleton
-- `CotNormHandle.coffee` - skeleton
+- `LinNormHandle.coffee` - implemented (neutralRate + sensitivity inputs, equation display)
+- `CotNormHandle.coffee` - implemented (f + e inputs, equation n=f·c6·c36^e, COT Faktoren feedback)
 - `DiffHandle.coffee` - skeleton
 - `uihandles.coffee` - instantiates all handles
 

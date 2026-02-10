@@ -71,7 +71,7 @@ Phase: Implementation (v0.1.0)
   - [x] Layout restructure (3×5 grid)
   - [x] Results display structure
   - [~] Wiring refactoring (partial - listener cleanup pending)
-  - [~] Normalization cells (QuadNorm done, LinNorm/CotNorm pending)
+  - [x] Normalization cells (QuadNorm, LinNorm, CotNorm all implemented)
   - [ ] Diff cells
   - [ ] Final wiring & test
 
@@ -92,6 +92,8 @@ Phase: Implementation (v0.1.0)
 | `MakroDataHandle` | UI for economic area data display/edit |
 | `ResultBoxHandle` | UI for ST/MLT/LT score results |
 | `QuadNormHandle` | UI for quadratic norm params (peak/steepness → a,b,c) |
+| `LinNormHandle` | UI for linear norm params (neutralRate/sensitivity → a,b) |
+| `CotNormHandle` | UI for COT norm params (f factor + e exponent, COT Faktoren feedback) |
 
 ### Data Flow
 ```
