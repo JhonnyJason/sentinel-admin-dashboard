@@ -44,12 +44,12 @@ In the dropboxes for "open" and "select version" we shall see which version is t
 ## Sub Tasks
 - [x] 6.0 Create implementation plan and define sub tasks
 - [x] 6.1 ExperimentStore class - data model, CRUD
-- [ ] 6.2 Snapshot/Apply infrastructure
-  - [ ] EconomicArea: add setParams(p)
-  - [ ] ScoringModel: add setDiffParams(p), setFinalWeights(w)
-  - [ ] playgroundcontroller: add snapshotParams(), applyParams(snapshot)
-  - [ ] playgroundcontroller: generalParamChanged calls forexscoreversion.onParamsChanged()
-  - [ ] ExperimentStore: replace dirty flag with baseSnapshot/liveSnapshot comparison, remove listeners
+- [x] 6.2 Snapshot/Apply infrastructure
+  - [x] EconomicArea: add setParams(p)
+  - [x] ScoringModel: add setDiffParams(p), setFinalWeights(w)
+  - [x] playgroundcontroller: add snapshotParams(), applyParams(snapshot)
+  - [x] playgroundcontroller: generalParamChanged calls forexscoreversion.onParamsChanged()
+  - [x] ExperimentStore: replace dirty flag with baseSnapshot/liveSnapshot comparison, remove listeners
 - [ ] 6.3 forexscoreversion UI: pug structure + VersionHandle
 - [ ] 6.4 Integration: wire store <> controller <> UI (via forexscoreversion.coffee as coordinator)
 - [ ] 6.5 Polish: visual indicators (blue dot, publish state, disabled states)

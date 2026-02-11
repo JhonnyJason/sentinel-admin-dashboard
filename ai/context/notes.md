@@ -57,7 +57,7 @@ See `sources/source/forexscoreversion/README.md` for architecture.
 - **No listeners on store** — forexscoreversion.coffee is the single coordinator (calls store, calls controller, updates UI directly)
 - **forexscoreversion.coffee** is the hub: store ↔ controller ↔ UI all flow through it
 - **playgroundcontroller** gets snapshotParams() and applyParams(snapshot) — the bridge between version control and live playground state
-- **generalParamChanged** → calls forexscoreversion.onParamsChanged() (currently only norm params; diff/weight params deferred)
+- **`paramChanged`** — single recalculation entry point in playgroundcontroller. All handles (norm, diff, weight) fire their onChangeListeners → paramChanged → scoringModel.recalculate() + versionControl.onParamsChanged(). ScoringModel mutation methods (updateDiffParam, updateFinalWeight) are silent setters — no internal recalculate.
 
 ## ForexScore Playground Architecture
 
@@ -96,7 +96,7 @@ User edits data → area.updateData() → listeners fire in order:
 - `QuadNormHandle.coffee` - implemented (pug equation + input wiring + refreshUI)
 - `LinNormHandle.coffee` - implemented (neutralRate + sensitivity inputs, equation display)
 - `CotNormHandle.coffee` - implemented (f + e inputs, equation n=f·c6·c36^e, COT Faktoren feedback)
-- `DiffHandle.coffee` - skeleton
+- `DiffHandle.coffee` - implemented (b/d inputs, diff curve display, wired to ScoringModel)
 - `uihandles.coffee` - instantiates all handles
 
 ### Utility Files
@@ -108,7 +108,9 @@ User edits data → area.updateData() → listeners fire in order:
 - `forexscoreframemodule/scoringmodule.coffee` - Conversion functions moved to `forexscoreplayground/normmath.coffee`. The scoringmodule and focuspairmodule in forexscoreframemodule are leftovers from a prior refactoring and should not be imported from.
 
 ## Next Actions
-1. Task 6: Version Control (sub-tasks 6.1-6.5)
-2. (Later) Show full ranking feature
-3. (Later) Wire up actual backend calls
-4. (Later) User Management feature
+1. Task 6.3: forexscoreversion UI — pug structure + VersionHandle
+2. Task 6.4: Integration wiring
+3. Task 6.5: Polish (visual indicators)
+4. (Later) Show full ranking feature
+5. (Later) Wire up actual backend calls
+6. (Later) User Management feature
