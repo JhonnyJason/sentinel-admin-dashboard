@@ -4,8 +4,7 @@ Version: v0.1.0
 TaskNr: 6
 
 ## Current Implementation State
-This Project had just been created with adding the source code from the Sentinel Dashboard as a basis. Basic adjustments have been made such that we have a shell now for adding the desired functionality.
- 
+Most of the core structrure is already in place - there are some missing freatures still outstanding + the counterpieces in the other codebases had not been adjusted yet.
 
 See progress of feature implementation in `./features.md`.
 

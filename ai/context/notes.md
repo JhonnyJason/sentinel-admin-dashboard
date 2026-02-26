@@ -97,13 +97,13 @@ User edits data → area.updateData() → listeners fire in order:
 - `MakroDataHandle.coffee` - implemented, wired via playgroundcontroller
 - `ResultBoxHandle.coffee` - implemented, wired to ScoringModel
 - `QuadNormHandle.coffee` - implemented (pug equation + input wiring + refreshUI)
-- `LinNormHandle.coffee` - implemented (neutralRate + sensitivity inputs, equation display)
+- `MrrNormHandle.coffee` - implemented (neutralRate + sensitivity inputs, equation display)
 - `CotNormHandle.coffee` - implemented (f + e inputs, equation n=f·c6·c36^e, COT Faktoren feedback)
 - `DiffHandle.coffee` - implemented (b/d inputs, diff curve display, wired to ScoringModel)
 - `uihandles.coffee` - instantiates all handles
 
 ### Utility Files
-- `normmath.coffee` - Pure math for param conversions (peak/steepness ↔ a,b,c; neutralRate/sensitivity ↔ a,b; defaultWidths)
+- `normmath.coffee` - Pure math for param conversions (peak/steepness ↔ a,b,c; neutralRate/sensitivity ↔ a,b)
 
 ---
 
@@ -111,9 +111,12 @@ User edits data → area.updateData() → listeners fire in order:
 - `forexscoreframemodule/scoringmodule.coffee` - Conversion functions moved to `forexscoreplayground/normmath.coffee`. The scoringmodule and focuspairmodule in forexscoreframemodule are leftovers from a prior refactoring and should not be imported from.
 
 ## Next Actions
-1. Task 6.3: forexscoreversion UI — pug structure + VersionHandle
-2. Task 6.4: Integration wiring
-3. Task 6.5: Polish (visual indicators)
-4. (Later) Show full ranking feature
-5. (Later) Wire up actual backend calls
-6. (Later) User Management feature
+1. **Task 6.4: Integration wiring** (current — see plan/current-task.md for sub-steps)
+   - Start with 6.4.0: hardcoded defaultSnapshot in ExperimentStore
+   - ExperimentStore gains async save/publish that call datamodule internally
+   - forexscoreversion.coffee gets refreshUI() as central UI-update function
+   - downSyncExperimentStore(null) bootstraps first experiment
+2. Task 6.5: Polish (visual indicators)
+3. (Later) Show full ranking feature
+4. (Later) Wire up actual backend calls
+5. (Later) User Management feature

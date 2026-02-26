@@ -68,9 +68,9 @@ ai/context/         # AI assistant context files
 Phase: Implementation (v0.1.0)
 - Task 0-5: Complete
 - Task 6: Version Control (Experiments) - in progress
-  - 6.0-6.2: Complete (ExperimentStore, snapshot/apply infrastructure, paramChanged wiring)
-  - 6.3: Next — forexscoreversion UI (pug structure + VersionHandle)
-  - See `plan/current-task.md` for sub-tasks
+  - 6.0-6.3: Complete (ExperimentStore, snapshot/apply, paramChanged wiring, UI pug+styles)
+  - 6.4: Current — Integration wiring (store ↔ controller ↔ UI)
+  - See `plan/current-task.md` for sub-steps
   - See `sources/source/forexscoreversion/README.md` for architecture
 
 ## ForexScore Playground Architecture
@@ -90,7 +90,7 @@ Phase: Implementation (v0.1.0)
 | `MakroDataHandle` | UI for economic area data display/edit |
 | `ResultBoxHandle` | UI for ST/MLT/LT score results + weight inputs |
 | `QuadNormHandle` | UI for quadratic norm params (peak/steepness → a,b,c) |
-| `LinNormHandle` | UI for linear norm params (neutralRate/sensitivity → a,b) |
+| `MrrNormHandle` | UI for linear norm params (neutralRate/sensitivity → a,b) |
 | `CotNormHandle` | UI for COT norm params (f factor + e exponent, COT Faktoren feedback) |
 | `DiffHandle` | UI for diff curve params (b/d inputs per indicator) |
 
