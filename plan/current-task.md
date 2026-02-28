@@ -46,13 +46,13 @@ Bring implementation in line with scoring-design docs. Each task is independentl
   - CotNormHandle: UI update for neutralCOT input (replacing f), update equation display
   - Update default params per area (see cot.md table)
 
-- [ ] 6.7 Diff curve reparametrization
+- [x] 6.7 Diff curve reparametrization
   - ScoringModel: parametrize by shape ∈ [0,1] instead of free b,d
   - Derivation: d = shape * 0.625, b = 2.5 * (1 - shape). Constraint: f(2) = 5.
   - DiffHandle: UI input becomes shape (single input instead of b + d)
   - Update defaults: all shape=0.50
 
-- [ ] 6.8 Final combination formula upgrade
+- [x] 6.8 Final combination formula upgrade
   - ScoringModel: add factor param (default 13)
   - ScoringModel.calcFinal: `factor * Σ(w*score) / Σ(w)` instead of direct `Σ(w*score)`
   - ResultBoxHandle: display factor, possibly add factor input
