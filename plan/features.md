@@ -11,6 +11,6 @@
 - [x] ForexScore Playground - Global Parameters display (diff functions + final combination weights)
 - [x] ForexScore Playground - Global Parameters manipulation
 - [x] ForexScore Playground - display results for full Ranking
-- [ ] ForexScore Frame - Ui for Version Control
+- [x] ForexScore Frame - Ui for Version Control
 - [ ] Version Control - data layer + connection to Websocket API
 - [ ] Backend integration - wire admin actions to WebSocket  

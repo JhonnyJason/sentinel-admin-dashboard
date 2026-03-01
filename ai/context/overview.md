@@ -68,8 +68,10 @@ ai/context/         # AI assistant context files
 Phase: Implementation (v0.1.0)
 - Task 0-5: Complete
 - Task 6: Version Control (Experiments) - in progress
-  - 6.0-6.3: Complete (ExperimentStore, snapshot/apply, paramChanged wiring, UI pug+styles)
-  - 6.4: Current — Integration wiring (store ↔ controller ↔ UI)
+  - 6.0-6.8: Complete (ExperimentStore, snapshot/apply, UI skeleton, scoring design upgrade)
+  - 6.9: Snapshot structure alignment — complete
+  - 6.10-6.13: Version control wiring — complete (refreshUI, downSync, event handlers, onParamsChanged)
+  - 6.14: Remote API wiring — complete (sendCommand, getAllHistory, mutation commands)
   - See `plan/current-task.md` for sub-steps
   - See `sources/source/forexscoreversion/README.md` for architecture
 
@@ -115,9 +117,9 @@ playgroundcontroller.setFocusPair(baseKey, quoteKey)
 See `sources/source/datamodule/README.md` for full spec.
 
 **Data Flow:**
-- `getAllData` → initial load (makro data + params)
-- WebSocket → fine-grained updates
-- Admin actions → `saveParams` / `publishParams`
+- `getAllMakroData` → initial load (makro data)
+- `getAllHistory` → experiment history (entries + published state)
+- Mutation commands → `createEntry` / `saveEntry` / `publishEntry` / `renameEntry`
 
 **Parameter Structure:**
 - Area params (per economic area): inflation, interest, gdp, cot normalization

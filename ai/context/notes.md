@@ -110,13 +110,15 @@ User edits data → area.updateData() → listeners fire in order:
 ## Deprecated Modules
 - `forexscoreframemodule/scoringmodule.coffee` - Conversion functions moved to `forexscoreplayground/normmath.coffee`. The scoringmodule and focuspairmodule in forexscoreframemodule are leftovers from a prior refactoring and should not be imported from.
 
+## Default Params — Single Source of Truth
+`forexscoreversion/defaultsnapshot.coffee` is the canonical source for all default parameter values.
+- `economicareasmodule` imports `areaParams` from it for EconomicArea initialization
+- `ScoringModel` imports `diffParams` + `finalWeights` from it (deep-copied in constructor)
+- `ExperimentStore` uses the full `snapshot` export when bootstrapping new experiments
+- Key names: `globalParams.diffCurves` (not `diff`), `finalWeights` includes `f` (factor) per horizon
+
 ## Next Actions
-1. **Task 6.4: Integration wiring** (current — see plan/current-task.md for sub-steps)
-   - Start with 6.4.0: hardcoded defaultSnapshot in ExperimentStore
-   - ExperimentStore gains async save/publish that call datamodule internally
-   - forexscoreversion.coffee gets refreshUI() as central UI-update function
-   - downSyncExperimentStore(null) bootstraps first experiment
-2. Task 6.5: Polish (visual indicators)
+1. **Version control** — 6.0-6.14 complete (store, UI, wiring, remote API all done)
+2. Task 6.15: Polish (visual indicators — blue dot, publish state)
 3. (Later) Show full ranking feature
-4. (Later) Wire up actual backend calls
-5. (Later) User Management feature
+4. (Later) User Management feature

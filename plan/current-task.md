@@ -58,7 +58,7 @@ Bring implementation in line with scoring-design docs. Each task is independentl
   - ResultBoxHandle: display factor, possibly add factor input
   - Update default weights (ST:{14,28,8,51}, ML:{8,8,4,5}, LT:{8,5,7,1})
 
-- [ ] 6.9 Snapshot structure alignment
+- [x] 6.9 Snapshot structure alignment
   - playgroundcontroller.snapshotParams(): output new param structure
   - playgroundcontroller.applyParams(): accept new param structure
   - EconomicArea.copyParams/setParams: use new param shapes
@@ -66,9 +66,8 @@ Bring implementation in line with scoring-design docs. Each task is independentl
   - ExperimentStore: defaultSnapshot() with correct new defaults
 
 ## Sub Tasks — Version Control Wiring (after scoring upgrade)
-- [ ] 6.10 refreshUI() in forexscoreversion — central UI-update function
-- [ ] 6.11 downSyncExperimentStore(null) — bootstrap first experiment
-- [ ] 6.12 Event handlers — createNew, createCopy, save, publish, open, selectVersion, rename
-- [ ] 6.13 onParamsChanged completion — updateLiveSnapshot + refreshUI
-- [ ] 6.14 Async save/publish with datamodule
-- [ ] 6.15 Polish: visual indicators (blue dot, publish state, disabled states)
+- [x] 6.10 refreshUI() in forexscoreversion — central UI-update function
+- [x] 6.11 downSyncExperimentStore(null) — bootstrap first experiment
+- [x] 6.12 Event handlers — createNew, createCopy, save, publish, open, selectVersion, rename
+- [x] 6.13 onParamsChanged completion — updateLiveSnapshot + refreshUI
+- [x] 6.14 Wire remote API for history entries (datamodule + forexscoreversion)
