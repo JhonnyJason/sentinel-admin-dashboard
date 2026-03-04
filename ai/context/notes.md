@@ -60,7 +60,7 @@ See `sources/source/forexscoreversion/README.md` for architecture.
 - **No listeners on store** — forexscoreversion.coffee is the single coordinator (calls store, calls controller, updates UI directly)
 - **forexscoreversion.coffee** is the hub: store ↔ controller ↔ UI all flow through it
 - **playgroundcontroller** gets snapshotParams() and applyParams(snapshot) — the bridge between version control and live playground state
-- **`paramChanged`** — single recalculation entry point in playgroundcontroller. All handles (norm, diff, weight) fire their onChangeListeners → paramChanged → scoringModel.recalculate() + versionControl.onParamsChanged(). ScoringModel mutation methods (updateDiffParam, updateFinalWeight) are silent setters — no internal recalculate.
+- **`paramChanged`** — single recalculation entry point in playgroundcontroller. All handles (norm, diff, weight) fire their onChangeListeners → paramChanged → ScoreCombinator.recalculate() + versionControl.onParamsChanged(). ScoreCombinator mutation methods (updateDiffParam, updateFinalWeight) are silent setters — no internal recalculate.
 
 ## ForexScore Playground Architecture
 
@@ -68,8 +68,8 @@ See `sources/source/forexscoreversion/README.md` for architecture.
 
 | Class | Location | Role |
 |-------|----------|------|
-| `EconomicArea` | economicareamodule/ | Per-area: data + params + score functions. Has updateListeners + isModified. |
-| `ScoringModel` | playgroundcontroller/ | Pair-level: diff params + weights + calculation. Has updateListeners. |
+| `EconomicArea` | economicareamodule/ | Per-area: data + params. Delegates scoring to areanorm. Has updateListeners + isModified. |
+| `ScoreCombinator` | scoringmodule/ | Pair-level: diff params + weights + calculation. Has updateListeners. |
 | `playgroundcontroller` | playgroundcontroller/ | Orchestrator: original/live areas, wires handles, triggers recalc. |
 
 ### Data Flow
@@ -80,13 +80,13 @@ economicareasmodule (original backend data)
        ▼
 playgroundcontroller.initialize()
        │ store originals, clone to liveAreas
-       │ create ScoringModel
+       │ create ScoreCombinator
        ▼
 playgroundcontroller.setFocusPair(baseKey, quoteKey)
        │ add controller listener to liveArea (FIRST)
        │ call handle.setArea(liveArea) → adds UI listener (SECOND)
        │ add reset listener to handle
-       │ wire scoringModel to resultBoxHandle
+       │ wire ScoreCombinator to resultBoxHandle
        ▼
 User edits data → area.updateData() → listeners fire in order:
   1. Controller: compare to original, set isModified, recalculate
@@ -95,25 +95,28 @@ User edits data → area.updateData() → listeners fire in order:
 
 ### Handle Classes
 - `MakroDataHandle.coffee` - implemented, wired via playgroundcontroller
-- `ResultBoxHandle.coffee` - implemented, wired to ScoringModel
+- `ResultBoxHandle.coffee` - implemented, wired to ScoreCombinator
 - `QuadNormHandle.coffee` - implemented (pug equation + input wiring + refreshUI)
 - `MrrNormHandle.coffee` - implemented (neutralRate + sensitivity inputs, equation display)
 - `CotNormHandle.coffee` - implemented (f + e inputs, equation n=f·c6·c36^e, COT Faktoren feedback)
-- `DiffHandle.coffee` - implemented (b/d inputs, diff curve display, wired to ScoringModel)
+- `DiffHandle.coffee` - implemented (b/d inputs, diff curve display, wired to ScoreCombinator)
 - `uihandles.coffee` - instantiates all handles
 
-### Utility Files
+### Scoring Pipeline (scoringmodule/)
 - `normmath.coffee` - Pure math for param conversions (peak/steepness ↔ a,b,c; neutralRate/sensitivity ↔ a,b)
+- `areanorm.coffee` - Pure normalization functions: inflNorm, mrrNorm, gdpgNorm, cotNorm
+- `ScoreCombinator.coffee` - Pair-level scoring engine (diff curves + final weights)
+- `scorehelper.coffee` - Display helpers: color/trend-text mapping, diff curve wrappers
 
 ---
 
 ## Deprecated Modules
-- `forexscoreframemodule/scoringmodule.coffee` - Conversion functions moved to `forexscoreplayground/normmath.coffee`. The scoringmodule and focuspairmodule in forexscoreframemodule are leftovers from a prior refactoring and should not be imported from.
+- `forexscoreframemodule/scoringmodule.coffee` - Conversion functions moved to `scoringmodule/normmath.coffee`. The scoringmodule.coffee and focuspairmodule in forexscoreframemodule are leftovers from a prior refactoring and should not be imported from.
 
 ## Default Params — Single Source of Truth
 `forexscoreversion/defaultsnapshot.coffee` is the canonical source for all default parameter values.
 - `economicareasmodule` imports `areaParams` from it for EconomicArea initialization
-- `ScoringModel` imports `diffParams` + `finalWeights` from it (deep-copied in constructor)
+- `ScoreCombinator` imports `diffParams` + `finalWeights` from it (deep-copied in constructor)
 - `ExperimentStore` uses the full `snapshot` export when bootstrapping new experiments
 - Key names: `globalParams.diffCurves` (not `diff`), `finalWeights` includes `f` (factor) per horizon
 

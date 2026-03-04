@@ -51,7 +51,8 @@ ai/context/         # AI assistant context files
 - forexscoreframemodule - Container frame
 - forexscoreplayground - Main grid, delegates to playgroundcontroller
 - playgroundcontroller - Orchestrates data flow, handle wiring, snapshotParams/applyParams
-- economicareamodule - EconomicArea class + area instances
+- economicareamodule - EconomicArea class + area instances (delegates scoring to scoringmodule)
+- scoringmodule - Scoring pipeline: normmath, areanorm, ScoreCombinator, scorehelper
 - focuspairselection - Pair selection combobox
 - forexscoreversion - Version control coordinator (store ↔ controller ↔ UI)
 
@@ -86,8 +87,8 @@ Phase: Implementation (v0.1.0)
 
 | Class | Role |
 |-------|------|
-| `EconomicArea` | Per-area data + normalization params + score functions |
-| `ScoringModel` | Pair-level diff params + weights + calculation |
+| `EconomicArea` | Per-area data + normalization params (delegates scoring to areanorm) |
+| `ScoreCombinator` | Pair-level diff params + weights + calculation (in scoringmodule) |
 | `playgroundcontroller` | Orchestrator: original/live areas, handle wiring, paramChanged |
 | `MakroDataHandle` | UI for economic area data display/edit |
 | `ResultBoxHandle` | UI for ST/MLT/LT score results + weight inputs |
@@ -103,7 +104,7 @@ economicareasmodule (backend data)
 playgroundcontroller.initialize()
        │ originalAreas ← backend areas
        │ liveAreas ← clones for UI manipulation
-       │ scoringModel ← new ScoringModel()
+       │ ScoreCombinator ← new ScoreCombinator()
        │
 playgroundcontroller.setFocusPair(baseKey, quoteKey)
        │ Wire listeners: controller first, then UI

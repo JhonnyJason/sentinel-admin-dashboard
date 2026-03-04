@@ -12,5 +12,6 @@
 - [x] ForexScore Playground - Global Parameters manipulation
 - [x] ForexScore Playground - display results for full Ranking
 - [x] ForexScore Frame - Ui for Version Control
-- [ ] Version Control - data layer + connection to Websocket API
-- [ ] Backend integration - wire admin actions to WebSocket  
+- [x] Version Control - data layer + connection to Websocket API
+- [x] Backend integration - wire admin actions to WebSocket  
+- [ ] Display of all 3 Score Ranking Lists (st, ml, lt)

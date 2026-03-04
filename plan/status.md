@@ -1,7 +1,7 @@
 # Status
 Phase: Implement
 Version: v0.1.0
-TaskNr: 6
+TaskNr: 7
 
 ## Current Implementation State
 Most of the core structrure is already in place - there are some missing freatures still outstanding + the counterpieces in the other codebases had not been adjusted yet.

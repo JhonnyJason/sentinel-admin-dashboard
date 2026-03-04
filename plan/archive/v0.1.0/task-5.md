@@ -4,15 +4,15 @@ Implement ForexScore Playground - FocusPair display parameter controls and calcu
 # Details
 We want to build the parameter manipulation for the ForexScore Playground.
 For convenient experimentation we want to see updated results immediately.
-On one side we have the makrodata + area-specific normalization parameters stored in the EconomicArea classes. On the other side we have the ScoringModel managing global parameters (diff curves, weights).
+On one side we have the makrodata + area-specific normalization parameters stored in the EconomicArea classes. On the other side we have the ScoreCombinator managing global parameters (diff curves, weights).
 
 ## Sub-Tasks
 - [x] Reflect and clarify requirements and plan implementation
-- [x] Step 1: Create ScoringModel (calculation engine)
+- [x] Step 1: Create ScoreCombinator (calculation engine)
 - [x] Step 2: Layout restructure (3×5 CSS grid)
 - [x] Step 3: Results display (ST/MLT/LT in Column 3, Row 1)
 - [~] Step 3.5: Wiring refactoring (PARTIAL - see blocked issue below)
-  - [x] ScoringModel created in `playgroundcontroller/`
+  - [x] ScoreCombinator created in `playgroundcontroller/`
   - [x] playgroundcontroller basic implementation
   - [x] EconomicArea.isModified property added
   - [x] forexscoreplayground delegates to playgroundcontroller
